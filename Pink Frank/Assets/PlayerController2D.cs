@@ -9,7 +9,11 @@ public class PlayerController2D : MonoBehaviour
     SpriteRenderer spriteRenderer;
     private bool facing = true;
     private bool jump = true;
-    
+
+    bool isGround;
+    [SerializeField]
+    Transform groundCheck;
+
     // Start is called before the first frame update
     void Start()
     {
@@ -20,6 +24,15 @@ public class PlayerController2D : MonoBehaviour
 
     // Update is called once per frame
     private void FixedUpdate() {
+
+        if (Physics2D.Linecast(transform.position, groundCheck.position, 1 << LayerMask.NameToLayer("Ground")))
+        {
+            isGround = true;
+        }
+        else {
+            isGround = false;
+        }
+
         if (Input.GetKey("d") || Input.GetKey("right"))
         {
             rb2d.velocity = new Vector2(4, rb2d.velocity.y);
@@ -39,9 +52,10 @@ public class PlayerController2D : MonoBehaviour
         
         
 
-        if (Input.GetKey("space"))
+        if (Input.GetKey("space")&&isGround)
         {
-            rb2d.velocity = new Vector2(rb2d.velocity.x, 4);
+            
+            rb2d.velocity = new Vector2(rb2d.velocity.x, 8);
         }
     }
 }
